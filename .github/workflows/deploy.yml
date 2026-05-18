@@ -27,7 +27,12 @@ jobs:
 
       - name: Inject Gemini API key
         run: |
-          sed -i "s|window.GEMINI_API_KEY = ''|window.GEMINI_API_KEY = '${{ secrets.GEMINI_API_KEY }}'|g" index.html
+          sed -i "s|window.GEMINI_API_KEY = '';|window.GEMINI_API_KEY = '${{ secrets.GEMINI_API_KEY }}';|g" index.html
+
+      - name: Verify injection worked
+        run: |
+          echo "=== Checking GEMINI_API_KEY line ==="
+          grep "GEMINI_API_KEY" index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
