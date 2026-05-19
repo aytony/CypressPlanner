@@ -27,7 +27,12 @@ jobs:
 
       - name: Inject Gemini API key
         run: |
-          sed -i "s|REPLACE_API_KEY|${{ secrets.GEMINI_API_KEY }}|g" index.html
+          python3 -c "
+          content = open('index.html').read()
+          content = content.replace('REPLACE_API_KEY', '${{ secrets.GEMINI_API_KEY }}')
+          open('index.html', 'w').write(content)
+          print('Replaced. Key starts with:', '${{ secrets.GEMINI_API_KEY }}'[:8])
+          "
 
       - name: Verify injection worked
         run: |
