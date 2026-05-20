@@ -25,18 +25,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Inject Gemini API key
+      - name: Inject Worker URL
         run: |
-          python3 -c "
-          content = open('index.html').read()
-          content = content.replace('REPLACE_API_KEY', '${{ secrets.GEMINI_API_KEY }}')
-          open('index.html', 'w').write(content)
-          print('Replaced. Key starts with:', '${{ secrets.GEMINI_API_KEY }}'[:8])
-          "
+          sed -i "s|REPLACE_WORKER_URL|${{ secrets.WORKER_URL }}|g" index.html
 
-      - name: Verify injection worked
+      - name: Verify injection
         run: |
-          grep "__CYPRESS_CONFIG__" index.html
+          grep "workerUrl" index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
