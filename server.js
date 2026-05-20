@@ -12,8 +12,8 @@ app.post('/generate', async (req, res) => {
   try {
     const { prompt, maxTokens } = req.body;
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+    const geminiRes = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -27,14 +27,22 @@ app.post('/generate', async (req, res) => {
       }
     );
 
-    const data = await response.json();
+    const data = await geminiRes.json();
+
+    // Surface Gemini errors clearly
+    if (data.error) {
+      console.error('Gemini error:', JSON.stringify(data.error));
+      return res.status(200).json({ text: 'Gemini error: ' + data.error.message });
+    }
+
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim()
-      || 'Unable to generate at this time. Please try again.';
+      || 'Unable to generate at this time.';
 
     res.json({ text });
 
   } catch (err) {
-    res.status(500).json({ text: 'Something went wrong. Please try again.' });
+    console.error('Server error:', err.message);
+    res.status(500).json({ text: 'Server error: ' + err.message });
   }
 });
 
