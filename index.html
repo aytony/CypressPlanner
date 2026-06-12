@@ -3048,7 +3048,7 @@ If a favorite verse or passage was shared, end with it or weave it in naturally.
     } catch (err) {
       var cfg = window.__CYPRESS_CONFIG__;
       var wUrl = cfg && cfg.workerUrl ? cfg.workerUrl : '';
-      var msg = (!wUrl || wUrl === 'REPLACE_WORKER_URL')
+      var msg = (!wUrl || wUrl === 'https://cypressplanner.onrender.com/generate')
         ? 'The AI writing service is not yet connected. Once your Render proxy is set up, this will generate a personalized tribute automatically.'
         : 'Something went wrong. Please check your connection and try again.';
       document.getElementById('legacyResultText').textContent = msg;
@@ -3109,7 +3109,7 @@ Return only the rewritten passage, no explanation.`;
 
   function callAI(prompt, maxTokens) {
     var workerUrl = (window.__CYPRESS_CONFIG__ && window.__CYPRESS_CONFIG__.workerUrl) || '';
-    if (!workerUrl || workerUrl === 'REPLACE_WORKER_URL') {
+    if (!workerUrl || workerUrl === 'https://cypressplanner.onrender.com/generate') {
       return Promise.reject(new Error('not_configured'));
     }
     return fetch(workerUrl, {
@@ -3409,7 +3409,7 @@ Return only the rewritten passage, no explanation.`;
 </script>
 <!-- !! INJECTION_POINT !! -->
 <script>
-  window.__CYPRESS_CONFIG__ = { workerUrl: 'REPLACE_WORKER_URL' };
+  window.__CYPRESS_CONFIG__ = { workerUrl: 'https://cypressplanner.onrender.com/generate' };
 </script>
 </body>
 </html>
